@@ -2,9 +2,15 @@ use std::fs::{self, File};
 use std::io::Write;
 use std::process::Command;
 
-fn fortune() -> Vec<String> {
+const DEFAULT_FORTUNE_LENGTH: usize = 160;
+
+fn fortune(len: Option<usize>) -> Vec<String> {
+    let len_string = len
+        .unwrap_or(DEFAULT_FORTUNE_LENGTH)
+        .to_string();
     String::from_utf8_lossy(
         &Command::new("fortune")
+            .args(&["-s", "-n", &len_string])
             .output()
             .expect("failed to execute `fortune`")
             .stdout,
@@ -15,18 +21,8 @@ fn fortune() -> Vec<String> {
     .collect()
 }
 
-/// Get a fortune with only specific length
-fn fortune_len(len: usize) -> Vec<String> {
-    loop {
-        let f = fortune();
-        if f.len() <= len {
-            return f;
-        }
-    }
-}
-
 fn main() {
-    let text = fortune_len(6);
+    let text = fortune(Some(6));
     let bash = include_str!("template.sh");
 
     let mut s = String::new();
