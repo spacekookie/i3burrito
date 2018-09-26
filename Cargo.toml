@@ -1,0 +1,5 @@
+[package]
+name = "i3burrito"
+version = "0.1.0"
+authors = ["Katharina Fey <kookie@spacekookie.de>"]
+edition = "2018"
