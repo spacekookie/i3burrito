@@ -38,11 +38,6 @@ fn main() {
         y += 50;
     }
 
-    match fs::remove_file("/tmp/locker.sh") {
-        Ok(_) => {}
-        Err(_) => {}
-    }
-
     let new = bash.replace("REPLACE_ME_HERE", &s);
     let mut f = File::create("/tmp/locker.sh").unwrap();
     f.write_all(new.as_bytes()).unwrap();
@@ -51,4 +46,8 @@ fn main() {
         .arg("/tmp/locker.sh")
         .output()
         .expect("Failed to run bash command!");
+
+    #[allow(deprecated)]
+    ::std::thread::sleep_ms(5000);
+    fs::remove_file("/tmp/locker.sh").unwrap();
 }
